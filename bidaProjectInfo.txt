@@ -1,0 +1,97 @@
+Bida Project// update lần cuối 28/05/2020 bởi Mạnh
+
+I. Cấu trúc project.
+    * Workflow:
+        Game sẽ được load đầu tiên từ "BiDaSplash" scene(load các resources cần thiết(%loaded)) sau khi load xong sẽ load vào "BiDaHomeScene", dựa vào trạng thái đăng nhập để bật tắt(active/deactive) các layer trong "BiDaHomeScene" scene.
+    
+    * Các Scenes: game hiện có 3 scenes.
+        1. BiDaSplash.
+            1.1. Chứa các file config game(Mysdk, GameManager)
+
+        2. BiDaHomeScene.
+            2.1. Main Lobby.(Layer chứa list các bàn đang có sẵn, được khởi tạo từ prefab "BillardLobby").
+                2.1.1. Trong prefab BillardLobby chứa UI:
+                    - "BillardLobbyLeft" Layer: chứa các button mức cược của mode tương ứng.
+                    - "BillardLobbyZone" Layer: chứa tất cả các list bài hiện có mà server trả về hiển thị trong scrollview.
+                        * Item bàn sẽ khác nhau đối với mỗi mode game, 11 sử dụng "item1vs1BidaTable", 14 sử dụng "item1vs4BidaTable".
+
+            2.2. Home Layer.(Layer chứa button list game, bottom và top header game và cổng đăng nhập đăng ký).
+                2.2.1. Home Mid Layer: chứa button list game(là một scroll view bao gồm tất cả các mode của game, header top, bottom).
+                    - Header top sử dụng prefab "BillardHomeTop" chứa UI bên trên như avatar, money, level, kiểu đồng tiền, và các button khác.
+                    - Header bottom sử dụng prefab "BillardHomeBottom" chứa UI bên dưới như cài đặt, sự kiện, hỗ trợ, cửa hàng, ...
+                    
+                2.2.2. Login Top Layer:
+                    - Cổng đăng nhập bao gồm các button đăng nhập, đăng ký, chơi nhanh, chơi offline.
+                    - Sau khi chọn đăng nhập hoặc đăng ký button thì sẽ khởi tạo prefab "BillardAuthenGate" chứa cửa sổ đăng nhập, đăng ký tương ứng.
+
+            2.3. Main Layer.(Layer chứa layer bàn chơi game chính mode 11, 14).
+                2.3.1. Chứa prefab "BillardsGameTable" là bàn bida sẽ sử dụng chung cho mode 11, 14 hiện có.
+                    - Header trong "BillardsGameTable":
+                        Tùy thuộc vào mode 11, 14 sẽ có 2 header khác nhau:
+                            + "PanelUsers1Vs4" header bàn chơi game 14.
+                            + "PanelUsers1Vs1" header bàn chơi game 11.
+                    - Các button khác có chức năng giống nhau(menu, bạn bè, chat, logic bàn chơi).
+
+            2.4. Main Popup.(Layer chứa các popup hiệu ứng(chọn slot mini game, chọn mode chơi với bạn)).
+
+            2.5. UI Common Layer.(Layer quản lý tất cả các UI khác bao gồm(cài đặt, profile, setting, thông báo, ...)).
+
+        3. BiDaOffline.
+            Dùng cho chơi offline sử dụng header 11 và "BillardsGameTable" prefab.
+    * Các Prefabs:
+        1. BiDaSplash.
+        2. BiDaHomeScene.
+            2.1. Main Lobby.
+                    - item1vs4BidaTable: item bàn chơi 14.
+                    - item1vs1BidaTable: item bàn chơi 11.
+                    - taoban: popup tạo bàn(mức cược).
+                    - btnBetSetting: item mức cược trong list zone.
+
+            2.2. Home Layer.
+                2.2.1. Home Mid Layer.
+                    - BillardHomeTop: header top home layer.
+                    - BillardHomeBottom: header bottom home layer.
+                    - ChangeName: popup change name cho người mới đăng ký thay đổi tên hiển thị.
+
+                2.2.2. Login Top Layer:
+                    - BillardAuthenGate: popup chứa popup đăng nhập đăng ký.
+                    - TestSwitchPlayer: popup animation fake chọn người chơi mode offline, do không cần đăng nhập vẫn dùng được chức năng này nên bỏ vào Login Top Layer.
+
+            2.3. Main Layer.
+                    - BillardsGameTable: bàn chơi game, trong bàn chơi chứa các prefab khác dưới đây:
+                        + Ball: bi trên bàn.
+                        + CueObj: gậy đánh bi.
+                        + BallInHole: bi bắt đầu rơi xuống lỗ(không chứa rigid body).
+                        + whiteBallView: popup điều chỉnh góc bắn bi cái(lực giật bi cái).
+                        + WBallPos: bàn tay cầm bi cái khi có bi cái rơi xuống lỗ cần phải đặt lại.
+                        + PanelUsers1Vs4: header bàn 14.
+                        + PanelUsers1Vs1: header bàn 11.
+                        + NoHuGameBaiEffectLayer: popup nổ hũ game bài nếu người chơi đạt điều kiện.
+                        + NoHuIcon: icon nổ hũ.
+                        + BallInHoleFx: hiệu ứng khi đánh được trúng bi của mình.
+            2.4. Main Popup.
+                    - PopupChoosePlayWithFriend: popup hiệu ứng chơi với bạn, trượt từ dưới lên.
+            2.5. UI Common Layer.
+                    - BillardPanelSetting: popup cài đặt tổng(ngôn ngữ, âm thanh, ...).
+                    - GiftCode: popup nhập mã GiftCode.
+                    - Guide: popup hướng dẫn chơi game.
+                    - Message: popup hộp thư.
+                    - FriendsZone: popup bạn bè(tìm bạn, danh sách bạn).
+                    - Shop: popup cửa hàng mua xu, thẻ.
+                    - sukienDialogV2: popup sự kiện.
+                    - BillardPanelUserInfo: popup thông tin người dùng khi click vào avatar.
+                    - BillardRankRecharse: popup top nạp.
+                    - BillardListCue: popup cửa hàng mua gậy.
+                    - BillardChatZone: popup chat tổng game.
+                    - MiniPoker: popup mini game minipocker.
+                    - MiniSlot: popop mini game slot777.
+                    - Larva: popup mini game slot 8 ball.
+                    - BillardLuckyWheel: popup vòng quay may mắn.
+                    - InviteReceiverDialog: popup chấp nhận mời chơi.
+                    - InviteSendDialog: popup mời chơi.
+                    - DailyGift: popup điểm danh hằng ngày.
+                    - Rank: popup xếp hạng người chơi.
+                    - TestSwitchPlayer: chức năng tương tự login top.
+                    - PopupMiniGame: popup chứa các mini game(minislot, minipoker, larva).
+        3. BiDaOffline.
+                    - Chứa bàn chơi offline chức năng tương tự BillardsGameTable prefab trong Main Layer.
